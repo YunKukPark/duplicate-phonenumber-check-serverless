@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+  </head>
+  <body>
+    <div class="st_mybd_list_btn">
+      <button class="address-search-button" type="button">내 주소록 중복 검사</button>
+    </div>
+
+    <input id="rawFile" type="hidden" value="hi" />
+    <div class="search-form">
+      <input id="excelFile" type="file" onchange="excelExport(event)" />
+    </div>
+    <script src="./app.js"></script>
+  </body>
+</html>
