@@ -28,8 +28,6 @@ function excelExport(event) {
   reader.readAsBinaryString(input.files[0]);
 }
 
-var refinedArr = new Array();
-
 function importFileHandler(event) {
   excelExport(event);
   setTimeout(() => {
@@ -39,6 +37,9 @@ function importFileHandler(event) {
     );
 
     console.log(intersectionData);
+
+    let filtered = myDataArr.filter((data) => intersectionData.includes(data.휴대폰번호));
+    console.log(JSON.stringify(filtered));
     //refinedArr = myDataArr.map((data) => data.휴대폰번호);
     //console.log(refinedArr);
   }, 1000);
