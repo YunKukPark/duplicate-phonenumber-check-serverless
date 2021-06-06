@@ -56,10 +56,7 @@ function importFileHandler(event) {
   }, 1000);
 }
 
-/* addEventListener Part */
-
-excelFileInput.addEventListener('change', importFileHandler);
-downloadButton.addEventListener('click', () => {
+function handleDownloadButton() {
   if (isFiltered) {
     // 이곳에 데이터 다운로드 구현 로직 짜기
     console.log('hihi');
@@ -72,4 +69,9 @@ downloadButton.addEventListener('click', () => {
     alert('먼저 엑셀파일을 등록해주세요');
     return;
   }
-});
+}
+
+/* addEventListener Part */
+
+excelFileInput.addEventListener('change', importFileHandler);
+downloadButton.addEventListener('click', handleDownloadButton);
