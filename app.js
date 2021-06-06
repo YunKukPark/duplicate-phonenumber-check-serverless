@@ -4,6 +4,12 @@ rawData = JSON.parse(JSON.stringify(rawData));
 rawData = rawData[0].주소록;
 var rawDataArr = new Array();
 var myDataArr = new Array();
+let filteredData = new Array();
+let isFiltered = false;
+
+// Excel Export 를 위한 변수 선언
+const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+const EXCEL_EXTENSION = '.xlsx';
 
 rawData.forEach(function (data, idx) {
   rawDataArr.push(data.phoneNumber);
@@ -12,6 +18,8 @@ rawData.forEach(function (data, idx) {
 console.log(rawDataArr);
 
 const excelFileInput = document.querySelector('#excelFile');
+const downloadButton = document.querySelector('#download-excel');
+const filteredJson = document.querySelector('#filtered-json');
 
 /* Function Component Archive */
 function excelExport(event) {
@@ -28,23 +36,40 @@ function excelExport(event) {
   reader.readAsBinaryString(input.files[0]);
 }
 
+function filterData() {
+  console.log(myDataArr);
+  var intersectionData = rawDataArr.filter((phoneNumber) =>
+    myDataArr.map((data) => data.휴대폰번호).includes(phoneNumber)
+  );
+
+  filteredData = myDataArr.filter((data) => intersectionData.includes(data.휴대폰번호));
+  console.log(filteredData);
+  isFiltered = true;
+
+  filteredJson.innerHTML = JSON.stringify(filteredData, undefined, 4);
+}
+
 function importFileHandler(event) {
   excelExport(event);
   setTimeout(() => {
-    console.log(myDataArr);
-    var intersectionData = rawDataArr.filter((phoneNumber) =>
-      myDataArr.map((data) => data.휴대폰번호).includes(phoneNumber)
-    );
-
-    console.log(intersectionData);
-
-    let filtered = myDataArr.filter((data) => intersectionData.includes(data.휴대폰번호));
-    console.log(JSON.stringify(filtered));
-    //refinedArr = myDataArr.map((data) => data.휴대폰번호);
-    //console.log(refinedArr);
+    filterData();
   }, 1000);
 }
 
 /* addEventListener Part */
 
 excelFileInput.addEventListener('change', importFileHandler);
+downloadButton.addEventListener('click', () => {
+  if (isFiltered) {
+    // 이곳에 데이터 다운로드 구현 로직 짜기
+    console.log('hihi');
+    const filteredSheetData = filteredData;
+    const filteredWorkSheet = XLSX.utils.json_to_sheet(filteredSheetData);
+    const filteredWorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(filteredWorkBook, filteredWorkSheet, 'filtered Data');
+    XLSX.writeFile(filteredWorkBook, '추출.xlsx');
+  } else {
+    alert('먼저 엑셀파일을 등록해주세요');
+    return;
+  }
+});
